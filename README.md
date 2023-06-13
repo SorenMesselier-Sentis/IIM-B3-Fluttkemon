@@ -1,16 +1,38 @@
-# flutter_flutkemon
+# Flutkemon
 
-A new Flutter project.
+Le projet Flutkemon est une application mobile développée en utilisant le framework Flutter. Cette application vise à utiliser pour la première fois Flutter avec une API REST, la PokéApi.
 
-## Getting Started
+## Fonctionnalités
 
-This project is a starting point for a Flutter application.
+- [Liste des fonctionnalités principales de l'application]
+- [Ajoutez autant de fonctionnalités que nécessaire]
 
-A few resources to get you started if this is your first Flutter project:
+## Captures d'écran
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+1. Clonez le dépôt GitHub du projet :
+
+```bash
+git clone https://github.com/SorenMesselier-Sentis/IIM-B3-Fluttkemon.git
+```
+
+2. Assurez-vous que Flutter est installé sur votre machine.
+
+3. Exécutez la commande suivante pour télécharger les dépendances nécessaires :
+
+```bash
+flutter pub get
+```
+
+4. Lancez l'application avec la commande :
+
+```bash
+flutter run
+```
+
+## Auteurs
+
+- [Antoine Bendafi-Schulmann](https://github.com/AntoineBendafiSchulmann)
+- [Soren Messelier-Sentis](https://github.com/SorenMesselier-Sentis)

@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'single_pokemon.dart';
+
 
 class PokemonInfo {
   final String name;
   final String spriteUrl;
   final List<String> types;
+  final String id; 
 
   PokemonInfo({
     required this.name,
     required this.spriteUrl,
     required this.types,
+    required this.id,
   });
 }
 
@@ -53,7 +57,7 @@ class _PokedexState extends State<Pokedex> {
   }
 
   Future<List<PokemonInfo>> fetchPokemonInfos() async {
-    final response = await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=151'));
+    final response = await http.get(Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=1050'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final results = data['results'];
@@ -68,7 +72,12 @@ class _PokedexState extends State<Pokedex> {
           final spriteUrl = pokemonData['sprites']['front_default'];
           final types = pokemonData['types'].map((type) => type['type']['name']).toList().cast<String>();
 
-          final pokemonInfo = PokemonInfo(name: name, spriteUrl: spriteUrl, types: types);
+          final pokemonInfo = PokemonInfo(
+          name: name,
+          spriteUrl: spriteUrl,
+          types: types,
+          id: pokemonData['id'].toString(),
+          );
           pokemonList.add(pokemonInfo);
         }
       }
@@ -102,32 +111,12 @@ class _PokedexState extends State<Pokedex> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (_) => AlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: pokemonList[startIndex].spriteUrl,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    pokemonList[startIndex].name,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    'Types: ${pokemonList[startIndex].types.join (', ')}',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SinglePokemon(
+                                pokemonName: pokemonList[startIndex].name,
+                                pokemonId: pokemonList[startIndex].id, 
                               ),
                             ),
                           );
@@ -164,36 +153,17 @@ class _PokedexState extends State<Pokedex> {
                       child: endIndex < pokemonList.length
                           ? GestureDetector(
                               onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        CachedNetworkImage(
-                                          imageUrl: pokemonList[endIndex].spriteUrl,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          pokemonList[endIndex].name,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Text(
-                                          'Types: ${pokemonList[endIndex].types.join (', ')}',
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SinglePokemon(
+                                      pokemonName: pokemonList[endIndex].name,
+                                      pokemonId: pokemonList[endIndex].id, // Passer l'ID du Pokémon à la page SinglePokemon
                                     ),
                                   ),
                                 );
                               },
+
                               child: Card(
                                 child: Column(
                                   children: [

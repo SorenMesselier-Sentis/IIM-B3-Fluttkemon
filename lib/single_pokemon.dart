@@ -32,7 +32,7 @@ class SinglePokemon extends StatelessWidget {
     'dragon': Colors.indigo,
     'dark': Colors.black,
     'steel': Colors.grey,
-    'fairy': Colors.pink,
+    'fairy': Color.fromARGB(255, 242, 127, 165),
   };
 
   Widget buildTypeContainer(String type) {

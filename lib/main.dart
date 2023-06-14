@@ -206,6 +206,9 @@ class _PokedexState extends State<Pokedex> {
                                     builder: (context) => SinglePokemon(
                                       pokemonName: pokemonList[startIndex].name,
                                       pokemonId: pokemonList[startIndex].id,
+                                      pokemonTypes: pokemonList[startIndex].types.length > 1
+                                      ? pokemonList[startIndex].types
+                                      : [pokemonList[startIndex].types[0]],
                                     ),
                                   ),
                                 );
@@ -250,6 +253,9 @@ class _PokedexState extends State<Pokedex> {
                                             pokemonName:
                                                 pokemonList[endIndex].name,
                                             pokemonId: pokemonList[endIndex].id,
+                                            pokemonTypes: pokemonList[endIndex].types.length > 1
+                                            ? pokemonList[endIndex].types
+                                            : [pokemonList[endIndex].types[0]],
                                           ),
                                         ),
                                       );

@@ -49,6 +49,17 @@ class Pokedex extends StatefulWidget {
 class _PokedexState extends State<Pokedex> {
   late Future<List<PokemonInfo>> pokemonInfos;
   List<PokemonInfo> filteredPokemonList = []; // Liste filtrée des Pokémon
+  List<String> generations = [
+    'Generation 1',
+    'Generation 2',
+    'Generation 3',
+    'Generation 4',
+    'Generation 5',
+    'Generation 6',
+    'Generation 7',
+    'Generation 8',
+  ];
+  int selectedGeneration = 0;
 
   @override
   void initState() {
@@ -58,7 +69,7 @@ class _PokedexState extends State<Pokedex> {
 
   Future<List<PokemonInfo>> fetchPokemonInfos() async {
     final response = await http
-        .get(Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=151'));
+        .get(Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=889'));
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final results = data['results'];
@@ -93,13 +104,43 @@ class _PokedexState extends State<Pokedex> {
 
   void filterPokemonList(String searchTerm) async {
     final pokemonList = await pokemonInfos;
+    final filteredList = pokemonList.where((pokemon) {
+      final nameLower = pokemon.name.toLowerCase();
+      final searchTermLower = searchTerm.toLowerCase();
+      return nameLower.contains(searchTermLower);
+    }).toList();
+
     setState(() {
-      filteredPokemonList = pokemonList.where((pokemon) {
-        final nameLower = pokemon.name.toLowerCase();
-        final searchTermLower = searchTerm.toLowerCase();
-        return nameLower.contains(searchTermLower);
-      }).toList();
+      if (selectedGeneration > 0) {
+        filteredPokemonList = filteredList.where((pokemon) {
+          final generation = getGenerationFromId(pokemon.id);
+          return generation == selectedGeneration;
+        }).toList();
+      } else {
+        filteredPokemonList = filteredList;
+      }
     });
+  }
+
+  int getGenerationFromId(String id) {
+    final intId = int.parse(id);
+    if (intId <= 151) {
+      return 0;
+    } else if (intId <= 251) {
+      return 1;
+    } else if (intId <= 386) {
+      return 2;
+    } else if (intId <= 493) {
+      return 3;
+    } else if (intId <= 649) {
+      return 4;
+    } else if (intId <= 721) {
+      return 5;
+    } else if (intId <= 809) {
+      return 6;
+    } else {
+      return 7;
+    }
   }
 
   @override
@@ -118,6 +159,25 @@ class _PokedexState extends State<Pokedex> {
                 labelText: 'Search',
                 border: OutlineInputBorder(),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DropdownButtonFormField(
+              value: selectedGeneration,
+              items: List<DropdownMenuItem<int>>.generate(
+                generations.length,
+                (index) => DropdownMenuItem<int>(
+                  value: index,
+                  child: Text(generations[index]),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  selectedGeneration = value as int;
+                  filterPokemonList('');
+                });
+              },
             ),
           ),
           Expanded(
